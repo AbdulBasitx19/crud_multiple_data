@@ -48,6 +48,50 @@ class PersonController extends Controller
         return redierct()->route('people.index')->with('success', 'Person Created Successfully.');
     }
 
+    public function edit(Person $person)
+    {
+        $person->load('contacts');
+        return view('people.edit', compact('person'));
+    }
+
+    public function update(Request $request, Person $person)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'age' => 'nullable|integer',
+            'contacts' => 'required|array|min:1',
+            'contacts.*.type' => 'required|string',
+            'contacts.*.value' => 'required|string',
+        ]);
+
+        $person->update([
+            'name' => $validated['name'],
+            'age' => $validated['age'],
+        ]);
+
+        $existingContactIds= $person->contacts->pluck('id')->toArray();
+        $incommingContactIds = [];
+
+        foreach($validated['contacts'] as $contactData)
+            {
+                if(!empty($contactData['id']))
+                {
+                   Contact::where('id', $contactData['id'])->update([
+                    'type' => $contactData['type'],
+                    'value' => $contactData['value'],
+                   ]);
+                   $incommingContactIds = $contactData['id'];
+                } else {
+                     $person->contacts()->create([
+                        'type' => $contactData['type'],
+                        'value' => $contactData['value'],
+                     ]);
+                     $incommingContactIds = $contactData['id'];
+                    }
+            }
+
+    }
+
     
     
 }
