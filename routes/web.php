@@ -8,3 +8,5 @@ Route::get('/', function () {
 });
 
 Route::get('/people', [PersonController::class, 'index'])->name('people.index');
+Route::get('/people/create', [PersonController::class, 'cerate'])->name('people.create');
+Route::post('/people', [PersonController::class , 'store'])->name('people.store');
