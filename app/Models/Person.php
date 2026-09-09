@@ -13,7 +13,7 @@ class Person extends Model
         'age',
     ];
 
-    public function conatcts(): HasMany
+    public function contacts(): HasMany
     {
         return $this->hasMany(Contact::class);
     }

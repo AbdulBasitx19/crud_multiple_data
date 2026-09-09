@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('contacts', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('person_id');
+            $table->string('type');
+            $table->string('value');
             $table->timestamps();
+
+            $table->foreign('person_id')->references('id')->on('people')->cascadeOnDelete();
         });
     }
 
