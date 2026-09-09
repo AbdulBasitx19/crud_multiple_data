@@ -90,6 +90,21 @@ class PersonController extends Controller
                     }
             }
 
+            $contactsToDelete = array_diff($existingContactIds, $incomingContactIds);
+            if (!empty($contactsToDelete)) {
+                Contact::destroy($contactsToDelete);
+            }
+
+        return redirect()->route('people.index')->with('success', 'Person and contacts updated successfully!');
+   
+
+    }
+
+    public function destroy(Person $person)
+    {
+        $person->delete();
+        return redirect()->route('people.index')->with('success', 'Person deleted successfully!');
+
     }
 
     

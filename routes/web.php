@@ -12,3 +12,4 @@ Route::get('/people/create', [PersonController::class, 'cerate'])->name('people.
 Route::post('/people', [PersonController::class , 'store'])->name('people.store');
 Route::get('/people/{person}/edit', [PersonController::class, 'edit'])->name('people.edit');
 Route::put('people/{person}', [PersonController::class , 'update'])->name('people.update');
+Route::delete('people/{person}', [PersonController::class, 'destroy'])->name('people.destory');
