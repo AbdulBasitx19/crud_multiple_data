@@ -1,20 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Create Person</title>
 </head>
 <body>
-    <h1>Add new person</h1>
-
-    <form action="{{ route('people.store')}}" method="POST">
+    <h1>Add New Person</h1>
+    
+    <form action="{{ route('people.store') }}" method="POST">
         @csrf
-
+        
         <h3>Person Details</h3>
-        <label>Name</label>
-        <input type="text" name="name" value={{ old('name')}} required>
+        <label>Name:</label><br>
+        <input type="text" name="name" value="{{ old('name') }}" required>
         @error('name') <span style="color:red;">{{ $message }}</span> @enderror
         <br><br>
 
@@ -26,8 +23,9 @@
         <hr>
         <h3>Contacts</h3>
         <div id="contacts-container">
+            <!-- Default ek contact field pehle se dikhayein -->
         </div>
-
+        
         <button type="button" onclick="addContactField()" style="margin-top: 10px;">+ Add Another Contact</button>
         <br><br>
         @error('contacts') <span style="color:red;">{{ $message }}</span> @enderror
@@ -36,7 +34,9 @@
         <button type="submit" style="padding: 10px 20px; background: green; color: white; border: none;">Save Person</button>
         <a href="{{ route('people.index') }}">Cancel</a>
     </form>
-     <script>
+
+    <!-- Simple JavaScript to add multiple contact fields dynamically -->
+    <script>
         let contactIndex = 0;
 
         function addContactField() {
@@ -65,6 +65,5 @@
             addContactField();
         };
     </script>
-
 </body>
 </html>
