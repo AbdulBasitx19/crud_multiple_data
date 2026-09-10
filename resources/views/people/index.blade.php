@@ -36,6 +36,17 @@
                 @else
                     <span style="color: gray;">No contacts added</span>
                 @endif
+
+                @if($person->skills->isNotEmpty())
+                    <div style="margin-top: 8px">
+                        <strong>Skills</strong>
+                        @foreach($person->skills as $skill)
+                            <span style="background=#e0e0e0; padding: 2px 6px; border-radius: 4px; font-size: 12px;">
+                                {{ $skill->name }}
+                            </span>
+                        @endforeach
+                    </div>
+                @endif
             </td>
             <td>
                 <a href="{{ route('people.edit', $person->id) }}">Edit</a> |

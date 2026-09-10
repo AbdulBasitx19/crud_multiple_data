@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Person;
 use App\Models\Contact;
+use App\Models\Skill;
 use Illuminate\Http\Request;
+
 
 class PersonController extends Controller
 {
@@ -16,7 +18,8 @@ class PersonController extends Controller
 
     public function create()
     {
-        return view('people.create');
+        $skills = Skill::all();
+        return view('people.create', compact('skills'));
     }
 
     public function store(Request $request)
@@ -27,6 +30,9 @@ class PersonController extends Controller
             'contacts' => 'required|array|min:1',
             'contacts.*.type' => 'required|string',      
             'contacts.*.value' => 'required|string',
+            'skills' => 'nullable|array',
+            'skills.*' => 'exists:skills,id',
+
         ]);
 
         $person = Person::create([
@@ -40,6 +46,10 @@ class PersonController extends Controller
                 'value' => $contactData['value'],
             ]);
         }
+        if(!empty($validated['skills']))
+            {
+                $person->skills()->attach($validated['skills']);
+            }
 
 
         return redirect()->route('people.index')->with('success', 'Person Created Successfully.');
@@ -47,8 +57,9 @@ class PersonController extends Controller
 
     public function edit(Person $person)
     {
-        $person->load('contacts');
-        return view('people.edit', compact('person'));
+        $person->load('contacts' , 'skills');
+        $skills = Skill::all();
+        return view('people.edit', compact('person', 'skills'));
     }
 
     public function update(Request $request, Person $person)
@@ -60,6 +71,8 @@ class PersonController extends Controller
             'contacts.*.id' => 'nullable|exists:contacts,id',
             'contacts.*.type' => 'required|string',
             'contacts.*.value' => 'required|string',
+            'skills' => 'nullable|array',
+            'skills.*' =>  'exists:skills,id'
         ]);
 
         $person->update([
@@ -92,6 +105,9 @@ class PersonController extends Controller
             Contact::destroy($contactsToDelete);
         }
 
+
+        $person->skills()->sync($validated['skills'] ?? []);
+
         return redirect()->route('people.index')->with('success', 'Person and contacts updated successfully!');
     }
 
@@ -100,4 +116,6 @@ class PersonController extends Controller
         $person->delete();
         return redirect()->route('people.index')->with('success', 'Person deleted successfully!');
     }
+
+
 }

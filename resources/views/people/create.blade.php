@@ -31,6 +31,19 @@
         @error('contacts') <span style="color:red;">{{ $message }}</span> @enderror
         <br>
 
+        <hr>
+        <h3>Skills (Select Multiple)</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 15px;">
+            @foreach($skills as $skill)
+                <label style="cursor: pointer;">
+                    <input type="checkbox" name="skills[]" value="{{ $skill->id }}">
+                    {{ $skill->name }}
+                </label>
+            @endforeach
+        </div>
+        @error('skills') <span style="color:red;">{{ $message }}</span> @enderror
+        <br><br>
+
         <button type="submit" style="padding: 10px 20px; background: green; color: white; border: none;">Save Person</button>
         <a href="{{ route('people.index') }}">Cancel</a>
     </form>

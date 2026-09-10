@@ -40,6 +40,23 @@
                 </div>
             @endforeach
         </div>
+
+        <hr>
+        <h3>Skills (Select Multiple)</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 15px">
+            @foreach($skills as $skill)
+               @php
+                $isChecked = in_array($skill->id , old('skills', $person->skills->pluck('id')->toArray()));
+               @endphp
+
+               <label style="cursor: pointer;">
+                <input type="checkbox" name="skills[]" value="{{ $skill->id }}" {{ $isChecked ? 'checked': '' }}>
+                {{ $skill->name}}
+               </label>
+            @endforeach
+        </div>
+        @error('skills') <span style="color: red;">{{ $message }}</span> @enderror
+        <br><br>
         
         <button type="button" onclick="addNewContactField()" style="margin-top: 10px;">+ Add Another Contact</button>
         <br><br>
